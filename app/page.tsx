@@ -26,7 +26,7 @@ export default function Home() {
           The Disney Bundle will increase by $1.
         </p>
         <img
-          className="w-[100%] max-w-[800px] mb-2 block "
+          className="w-[100%] max-w-[800px] mb-2 block"
           src={"/images/cta-logo-two.png"}
           alt=""
         />
