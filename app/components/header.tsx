@@ -1,13 +1,14 @@
 "use client";
 import Link from "next/link";
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const Header = () => {
   return (
     <div className="fixed top-0 left-0 w-full z-10 bg-[#090b13] h-18 flex flex-row justify-between items-center  px-5 md:px-10">
       <img className="w-25" src={"/images/logo.svg"} alt="Disney +" />
-      <LoginButton />
       <Navigation />
+      <LoginButton />
     </div>
   );
 };
@@ -15,6 +16,8 @@ const Header = () => {
 export default Header;
 
 const Navigation = () => {
+  const handleLogin = () => {};
+
   return (
     <nav className="flex gap-6">
       <Link className="flex flex-row align-middle gap-1.5" href="/">
@@ -43,10 +46,7 @@ const Navigation = () => {
 
 const LoginButton = () => {
   return (
-    <button
-      // style={{ color: "var(--background)" }}
-      className="px-12 py-3 border-2 border-white hover:bg-white hover:text-[#040714] hover:cursor-pointer"
-    >
+    <button className="px-12 py-3 border-2 border-white hover:bg-white hover:text-[#040714] hover:cursor-pointer">
       Login
     </button>
   );
