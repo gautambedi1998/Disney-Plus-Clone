@@ -2,6 +2,14 @@
 import Link from "next/link";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
+
+import {
+  selectUserName,
+  selectUserPhoto,
+  setUserLoginDetails,
+  setSignoutState,
+} from "../features/user/userSlice";
 
 const Header = () => {
   return (
@@ -16,8 +24,6 @@ const Header = () => {
 export default Header;
 
 const Navigation = () => {
-  const handleLogin = () => {};
-
   return (
     <nav className="flex gap-6">
       <Link className="flex flex-row align-middle gap-1.5" href="/">
@@ -42,6 +48,13 @@ const Navigation = () => {
       </Link>
     </nav>
   );
+};
+
+const handleLogin = async () => {
+  try {
+  } catch (error) {
+    return "Error in handle login" + error;
+  }
 };
 
 const LoginButton = () => {
