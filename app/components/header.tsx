@@ -1,13 +1,22 @@
 "use client";
 import Link from "next/link";
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
+
+import {
+  selectUserName,
+  selectUserPhoto,
+  setUserLoginDetails,
+  setSignoutState,
+} from "../features/user/userSlice";
 
 const Header = () => {
   return (
     <div className="fixed top-0 left-0 w-full z-10 bg-[#090b13] h-18 flex flex-row justify-between items-center  px-5 md:px-10">
       <img className="w-25" src={"/images/logo.svg"} alt="Disney +" />
-      <LoginButton />
       <Navigation />
+      <LoginButton />
     </div>
   );
 };
@@ -41,6 +50,17 @@ const Navigation = () => {
   );
 };
 
+const handleLogin = async () => {
+  try {
+  } catch (error) {
+    return "Error in handle login" + error;
+  }
+};
+
 const LoginButton = () => {
-  return <button className="px-12 py-3 border-2 border-white">Login</button>;
+  return (
+    <button className="px-12 py-3 border-2 border-white hover:bg-white hover:text-[#040714] hover:cursor-pointer">
+      Login
+    </button>
+  );
 };
