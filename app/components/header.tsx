@@ -42,5 +42,12 @@ const Navigation = () => {
 };
 
 const LoginButton = () => {
-  return <button className="px-12 py-3 border-2 border-white">Login</button>;
+  return (
+    <button
+      // style={{ color: "var(--background)" }}
+      className="px-12 py-3 border-2 border-white hover:bg-white hover:text-[#040714] hover:cursor-pointer"
+    >
+      Login
+    </button>
+  );
 };
