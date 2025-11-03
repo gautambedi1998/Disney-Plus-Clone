@@ -2,6 +2,7 @@ import Header from "./components/header";
 
 export default function Home() {
   return (
+    //Making it live on vercel
     <div
       className="h-screen w-screen overflow-hidden flex align-middle justify-center"
       style={{
