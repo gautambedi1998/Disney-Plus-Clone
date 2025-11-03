@@ -13,6 +13,7 @@ import {
   setUserLoginDetails,
   setSignoutState,
 } from "../features/user/userSlice";
+import { GiToken } from "react-icons/gi";
 
 const Header = () => {
   const router = useRouter();
@@ -179,16 +180,19 @@ const LoginButton = () => {
   const handleLogin = async () => {
     try {
       const provider = new GoogleAuthProvider();
-      signInWithPopup(auth, provider)
-        .then((result) => {
-          const credential = GoogleAuthProvider.credentialFromResult(result);
-          const token = credential?.accessToken;
-          console.log(token);
-          const user = result.user;
-        })
-        .catch((error) => {
-          console.log("Error in handleLogin" + error);
-        });
+      const result = await signInWithPopup(auth, provider);
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential?.accessToken;
+      const user = result.user;
+
+      console.log(token);
+
+      await fetch("/api/access_token", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token }),
+        credentials: "include",
+      });
     } catch (error) {
       return "Error in Handle Login" + error;
     }
