@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
 import { auth } from "@/app/Firebase/firebase";
 import { HiMenu, HiX } from "react-icons/hi";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 
 import {
   selectUserName,
@@ -63,6 +65,25 @@ const Navigation = () => {
       return "Error in Handle Logout" + error;
     }
   };
+
+  useGSAP(() => {
+    if (isOpen) {
+      // Animate menu open
+      gsap.fromTo(
+        "#menuItems",
+        { y: -50, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" }
+      );
+    } else {
+      // Optional: animate menu close
+      gsap.to("#menuItems", {
+        y: -30,
+        opacity: 0,
+        duration: 0.3,
+        ease: "power2.in",
+      });
+    }
+  }, [isOpen]);
 
   return (
     <nav>
@@ -123,7 +144,10 @@ const Navigation = () => {
           {isOpen ? <HiX size={28} /> : <HiMenu size={28} />}
         </button>
         {isOpen && (
-          <div className="fixed inset-x-0 mt-8 p-5 z-10 flex flex-col items-center justify-center gap-6 bg-[#090b13] ">
+          <div
+            id="menuItems"
+            className="fixed inset-x-0 mt-8 p-5 z-10 flex flex-col items-center justify-center gap-6 bg-[#090b13] "
+          >
             <Link className="flex flex-row gap-1.5 items-center" href="/home">
               <img className="w-8" src="/images/home-icon.svg" alt="HOME" />
               <span className="text-[1.2rem] tracking-wider">HOME</span>
