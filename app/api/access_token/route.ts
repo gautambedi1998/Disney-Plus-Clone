@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+const { OAuth2Client } = require("google-auth-library");
 
 export async function POST(req: NextRequest) {
   try {
@@ -10,7 +11,6 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-    const { OAuth2Client } = require("google-auth-library");
     const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
     const validToken = await client.verifyIdToken({
       idToken: token,
@@ -18,8 +18,10 @@ export async function POST(req: NextRequest) {
     });
 
     const payload = validToken.getPayload();
-    console.log(payload);
+
+    return NextResponse.json({ message: "User is verified" }, { status: 200 });
   } catch (error) {
+    console.log(error);
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 }

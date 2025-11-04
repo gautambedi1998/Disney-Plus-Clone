@@ -13,7 +13,6 @@ import {
   setUserLoginDetails,
   setSignoutState,
 } from "../features/user/userSlice";
-import { GiToken } from "react-icons/gi";
 
 const Header = () => {
   const router = useRouter();
@@ -182,10 +181,11 @@ const LoginButton = () => {
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
       const credential = GoogleAuthProvider.credentialFromResult(result);
-      const token = credential?.accessToken;
+      const token = credential?.idToken;
+      // const token = await result.user.getIdToken();
       const user = result.user;
 
-      console.log(token);
+      console.log("Id Token:", token);
 
       await fetch("/api/access_token", {
         method: "POST",
