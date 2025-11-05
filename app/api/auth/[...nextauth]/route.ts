@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-const { OAuth2Client } = require("google-auth-library");
+import { OAuth2Client } from "google-auth-library";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -13,6 +13,8 @@ const handler = NextAuth({
       },
       async authorize(credentials) {
         const token = credentials?.token;
+
+        if (!token) return null;
 
         try {
           const ticket = await client.verifyIdToken({
