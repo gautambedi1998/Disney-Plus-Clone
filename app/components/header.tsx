@@ -3,9 +3,12 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
-import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { auth } from "@/app/Firebase/firebase";
 import { HiMenu, HiX } from "react-icons/hi";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { signIn, useSession, signOut } from "next-auth/react";
 
 import {
   selectUserName,
@@ -13,33 +16,41 @@ import {
   setUserLoginDetails,
   setSignoutState,
 } from "../features/user/userSlice";
+import { stat } from "fs";
 
 const Header = () => {
+  const { status } = useSession();
   const router = useRouter();
   const dispatch = useDispatch();
   const userName = useSelector(selectUserName);
   const userPhoto = useSelector(selectUserPhoto);
+
   useEffect(() => {
-    const authChange = auth.onAuthStateChanged((user) => {
-      if (user) {
-        dispatch(
-          setUserLoginDetails({
-            name: user.displayName,
-            email: user.email,
-            photo: user.photoURL,
-          })
-        );
+    const handleAuthStatus = async () => {
+      if (status === "authenticated") {
+        const user = auth.currentUser;
+
+        if (user) {
+          dispatch(
+            setUserLoginDetails({
+              name: user.displayName,
+              email: user.email,
+              photo: user.photoURL,
+            })
+          );
+        }
+
+        console.log("User logged in →", user?.displayName);
         router.push("./home");
       } else {
         dispatch(setSignoutState());
         router.push("./");
       }
-    });
-    return () => {
-      console.log("---------->" + userName);
-      authChange();
     };
-  }, [dispatch]);
+
+    handleAuthStatus();
+  }),
+    [status];
 
   return (
     <div className="fixed top-0 left-0 w-full z-10 bg-[#090b13] h-18 flex flex-row justify-between items-center  px-5 md:px-10">
@@ -56,13 +67,33 @@ const Navigation = () => {
 
   const handleLogout = async () => {
     try {
-      await signOut(auth).then(() => {
-        console.log("Signout Successful");
-      });
+      // await signOut(auth).then(() => {
+      //   console.log("Signout Successful");
+      // });
+      await signOut({ redirect: false });
     } catch (error) {
       return "Error in Handle Logout" + error;
     }
   };
+
+  useGSAP(() => {
+    if (isOpen) {
+      // Animate menu open
+      gsap.fromTo(
+        "#menuItems",
+        { y: -50, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" }
+      );
+    } else {
+      // Optional: animate menu close
+      gsap.to("#menuItems", {
+        y: -30,
+        opacity: 0,
+        duration: 0.3,
+        ease: "power2.in",
+      });
+    }
+  }, [isOpen]);
 
   return (
     <nav>
@@ -123,7 +154,10 @@ const Navigation = () => {
           {isOpen ? <HiX size={28} /> : <HiMenu size={28} />}
         </button>
         {isOpen && (
-          <div className="fixed inset-x-0 mt-8 p-5 z-10 flex flex-col items-center justify-center gap-6 bg-[#090b13] ">
+          <div
+            id="menuItems"
+            className="fixed inset-x-0 mt-8 p-5 z-10 flex flex-col items-center justify-center gap-6 bg-[#090b13] "
+          >
             <Link className="flex flex-row gap-1.5 items-center" href="/home">
               <img className="w-8" src="/images/home-icon.svg" alt="HOME" />
               <span className="text-[1.2rem] tracking-wider">HOME</span>
@@ -179,16 +213,24 @@ const LoginButton = () => {
   const handleLogin = async () => {
     try {
       const provider = new GoogleAuthProvider();
-      signInWithPopup(auth, provider)
-        .then((result) => {
-          const credential = GoogleAuthProvider.credentialFromResult(result);
-          const token = credential?.accessToken;
-          console.log(token);
-          const user = result.user;
-        })
-        .catch((error) => {
-          console.log("Error in handleLogin" + error);
-        });
+      const result = await signInWithPopup(auth, provider);
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential?.idToken;
+      // const token = await result.user.getIdToken();
+      const user = result.user;
+
+      console.log("Id Token:", token);
+      await signIn("credentials", {
+        token,
+        redirect: false,
+      });
+
+      // await fetch("/api/access_token", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify({ token }),
+      //   credentials: "include",
+      // });
     } catch (error) {
       return "Error in Handle Login" + error;
     }
