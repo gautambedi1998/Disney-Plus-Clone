@@ -5,34 +5,76 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 
 const Carousel = () => {
-  const bannerRef = useRef<HTMLDivElement[]>([]);
   const sliderRef = useRef<HTMLDivElement>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  const [bannerImage, setBannerImage] = useState({
-    bannerId: 0,
-    isLastBanner: false,
+  const slideWidth = 100; // vw width per slide
+  const gap = 4; // vw gap between slides
+  const totalSlides = bannerImages.length;
+  const transitionDuration = 2; // seconds
+  const holdDuration = 1; // seconds slide stays visible
+
+  const goToSlide = (index: number) => {
+    gsap.to("#slider", {
+      x: `-${index * slideWidth}vw`,
+      duration: transitionDuration,
+      ease: "power2.inOut",
+    });
+  };
+
+  useGSAP(() => {
+    const tl = gsap.timeline({
+      repeat: -1,
+      // onRepeat: () => setCurrentIndex(0),
+      onComplete: () => {
+        setCurrentIndex(0);
+      },
+    });
+
+    for (let i = 0; i < totalSlides; i++) {
+      tl.to("#slider", {
+        x: `-${i * slideWidth}vw`,
+        duration: transitionDuration,
+        // delay: holdDuration,
+        ease: "power2.inOut",
+        onStart: () => setCurrentIndex(i),
+      });
+    }
   });
 
-  // useGSAP(() =>
-  //   gsap.to(sliderRef.current, {
-  //     x: `-${100 * 1}%`,
-  //     duration: 2,
-  //     ease: "power2.inOut",
-  //   })
-  // );
-
   return (
-    <div
-      className="flex flex-row"
-      style={{ width: `${bannerImages.length * 100}%` }}
-    >
-      {bannerImages.map((element, i) => (
-        <div key={element.id} id="slider" className="w-[80vw]">
-          {element.id}
-          <img src={element.source} className="w-full h-full object-cover" />
-          <span className="absolute h-full w-full rounded-full caret-amber-200 "></span>
-        </div>
-      ))}
+    <div className="flex flex-col gap-2">
+      <div
+        className="flex flex-row gap-4"
+        style={{ width: `${bannerImages.length * 100}%` }}
+        id="slider"
+      >
+        {bannerImages.map((element, i) => (
+          <>
+            <div
+              key={element.id}
+              className="w-[100vw] h-[22vw] shadow-2xl pt-4 pb-4"
+            >
+              <img
+                src={element.source}
+                className="w-full h-full object-cover "
+                alt="banner"
+              />
+            </div>
+          </>
+        ))}
+      </div>
+      <div className="flex flex-row a justify-center">
+        {bannerImages.map((_, i) => (
+          <div
+            key={i}
+            className={`relative mx-2 w-3 h-3 rounded-full cursor-pointer ${
+              currentIndex === i ? "bg-gray-400" : "bg-gray-100"
+            }`}
+            onClick={() => goToSlide(i)}
+          ></div>
+        ))}
+      </div>
     </div>
   );
 };
