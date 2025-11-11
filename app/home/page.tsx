@@ -3,7 +3,7 @@ import Carousel from "../components/carousel";
 
 const HomePage = () => {
   return (
-    <div className="w-screen h-screen bg-[url('/images/home-background.png')] bg-cover bg-no-repeat pt-25">
+    <div className="w-screen h-screen bg-[url('/images/home-background.png')] bg-cover bg-no-repeat pt-18">
       <Carousel />
     </div>
   );
