@@ -1,7 +1,7 @@
 import React from "react";
 
 const Viewers = () => {
-  return <div></div>;
+  return <div>Viewers</div>;
 };
 
 export default Viewers;

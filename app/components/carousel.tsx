@@ -53,7 +53,7 @@ const Carousel = () => {
         {bannerImages.map((element, i) => (
           <div
             key={element.id}
-            className="w-[100vw] h-[22vw] shadow-2xl pt-4 pb-4"
+            className="w-[100vw] h-[22vw] shadow-2xs pt-4 pb-4"
           >
             <img
               src={element.source}
@@ -63,17 +63,7 @@ const Carousel = () => {
           </div>
         ))}
       </div>
-      <div className="flex flex-row  justify-center">
-        {bannerImages.map((_, i) => (
-          <div
-            key={i}
-            className={`relative mx-2 w-3 h-3 rounded-full cursor-pointer ${
-              currentIndex === i ? "bg-gray-400" : "bg-gray-100"
-            }`}
-            onClick={() => goToSlide(i)}
-          ></div>
-        ))}
-      </div>
+
       <button
         className="absolute top-1/2 left-2 -translate-y-1/2  rounded-full p-2  shadow-lg  transition"
         onClick={() => {
@@ -95,6 +85,17 @@ const Carousel = () => {
       >
         <FiChevronRight size={24} />
       </button>
+      <span className="flex flex-row  justify-center">
+        {bannerImages.map((_, i) => (
+          <span
+            key={i}
+            className={`relative mx-2 w-3 h-3 rounded-full cursor-pointer ${
+              currentIndex === i ? "bg-gray-400" : "bg-gray-100"
+            }`}
+            onClick={() => goToSlide(i)}
+          ></span>
+        ))}
+      </span>
     </div>
   );
 };
