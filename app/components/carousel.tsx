@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { bannerImages } from "../constants/index";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
 const Carousel = () => {
   const sliderRef = useRef<HTMLDivElement>(null);
@@ -50,18 +51,16 @@ const Carousel = () => {
         id="slider"
       >
         {bannerImages.map((element, i) => (
-          <>
-            <div
-              key={element.id}
-              className="w-[100vw] h-[22vw] shadow-2xl pt-4 pb-4"
-            >
-              <img
-                src={element.source}
-                className="w-full h-full object-cover "
-                alt="banner"
-              />
-            </div>
-          </>
+          <div
+            key={element.id}
+            className="w-[100vw] h-[22vw] shadow-2xl pt-4 pb-4"
+          >
+            <img
+              src={element.source}
+              className="w-full h-full object-cover "
+              alt="banner"
+            />
+          </div>
         ))}
       </div>
       <div className="flex flex-row a justify-center">
@@ -75,6 +74,27 @@ const Carousel = () => {
           ></div>
         ))}
       </div>
+      <button
+        className="absolute top-1/4 left-2 -translate-y-1/2  rounded-full p-2  shadow-lg  transition"
+        onClick={() => {
+          setCurrentIndex(currentIndex - 1);
+          goToSlide(currentIndex - 1);
+        }}
+      >
+        <FiChevronLeft size={24} />
+      </button>
+
+      {/* Next Button */}
+      <button
+        className="absolute top-1/4 right-2 -translate-y-1/2  rounded-full p-2 shadow-lg  transition"
+        onClick={() => {
+          if (currentIndex > 4) setCurrentIndex(0);
+          setCurrentIndex(currentIndex + 1);
+          goToSlide(currentIndex + 1);
+        }}
+      >
+        <FiChevronRight size={24} />
+      </button>
     </div>
   );
 };
