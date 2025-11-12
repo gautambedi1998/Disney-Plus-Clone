@@ -63,7 +63,7 @@ const Carousel = () => {
           </div>
         ))}
       </div>
-      <div className="flex flex-row a justify-center">
+      <div className="flex flex-row  justify-center">
         {bannerImages.map((_, i) => (
           <div
             key={i}
