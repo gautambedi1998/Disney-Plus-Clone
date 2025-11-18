@@ -53,7 +53,7 @@ const Carousel = () => {
         {bannerImages.map((element, i) => (
           <div
             key={element.id}
-            className="w-[100vw] h-[22vw] shadow-2xs pt-4 pb-4"
+            className="w-[100vw] h-[22vw] shadow-2xs pt-4 pb-4 cursor-pointer"
           >
             <img
               src={element.source}
@@ -65,7 +65,7 @@ const Carousel = () => {
       </div>
 
       <button
-        className="absolute top-1/2 left-2 -translate-y-1/2  rounded-full p-2  shadow-lg  transition"
+        className="absolute top-1/2 left-2 -translate-y-1/2  rounded-full p-2  shadow-lg  transition cursor-pointer"
         onClick={() => {
           setCurrentIndex(currentIndex - 1);
           goToSlide(currentIndex - 1);
@@ -76,7 +76,7 @@ const Carousel = () => {
 
       {/* Next Button */}
       <button
-        className="absolute top-1/2 right-2 -translate-y-1/2  rounded-full p-2 shadow-lg  transition"
+        className="absolute top-1/2 right-2 -translate-y-1/2  rounded-full p-2 shadow-lg  transition cursor-pointer"
         onClick={() => {
           if (currentIndex > 4) setCurrentIndex(0);
           setCurrentIndex(currentIndex + 1);
